@@ -1,0 +1,23 @@
+# Tasks
+
+- [x] Project Setup <!-- id: 0 -->
+    - [x] Initialize Python environment and dependencies <!-- id: 1 -->
+    - [x] Create `implementation_plan.md` <!-- id: 2 -->
+- [x] Data Extraction <!-- id: 3 -->
+    - [x] Implement Discord client for message history fetching <!-- id: 4 -->
+    - [x] Create script to save messages to a file (JSON/CSV) <!-- id: 5 -->
+    - [x] Extract data from X (Twitter) (Skipped: Login required) <!-- id: 15 -->
+- [x] Data Analysis <!-- id: 12 -->
+    - [x] Analyze personality and speaking style <!-- id: 13 -->
+    - [x] Create `personality_analysis.md` <!-- id: 14 -->
+- [x] Data Preprocessing <!-- id: 6 -->
+    - [x] Clean data (remove bot commands, system messages) <!-- id: 7 -->
+    - [x] Format data for LLM fine-tuning <!-- id: 8 -->
+- [x] Bot Implementation <!-- id: 9 -->
+    - [x] Basic bot structure <!-- id: 10 -->
+    - [x] Integrate LLM for response generation <!-- id: 11 -->
+- [x] Bot Enhancement <!-- id: 16 -->
+    - [x] Collect all message history (remove limit) <!-- id: 17 -->
+    - [x] Create customizable personality config <!-- id: 18 -->
+    - [x] Add example phrases database <!-- id: 19 -->
+    - [x] Test enhanced bot <!-- id: 20 -->
