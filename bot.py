@@ -104,7 +104,7 @@ model = genai.GenerativeModel(
 # Initialize Discord client with commands extension
 intents = discord.Intents.default()
 intents.message_content = True
-intents.members = True # Enable members intent for permission checks
+# intents.members = True # Enable members intent for permission checks (Requires Privileged Intent in Dev Portal)
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
