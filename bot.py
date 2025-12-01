@@ -215,17 +215,26 @@ async def mimic_list_text(ctx):
     await ctx.send(f"Available personalities: {', '.join(personalities)}")
 
 # Command: Restart (Admin only)
-@bot.command(name="restart")
-@commands.has_permissions(administrator=True)
+@bot.command(name="restart", aliases=['kill'])
 async def restart(ctx):
-    await ctx.send('再起動します...')
-    print(f"Restart initiated by {ctx.author.name}")
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+    # Check for Administrator permission
+    if ctx.author.guild_permissions.administrator:
+        await ctx.send('再起動します...')
+        print(f"Restart initiated by {ctx.author.name}")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    else:
+        # Debug: Show what permissions the bot sees
+        perms = [p[0] for p in ctx.author.guild_permissions if p[1]]
+        await ctx.send(f'権限がありません。管理者のみ実行可能です。\n認識されている権限: {", ".join(perms) if perms else "なし"}')
 
-@restart.error
-async def restart_error(ctx, error):
+# Error handler for other commands
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        return
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send('権限がありません。管理者のみ実行可能です。')
+        await ctx.send('権限がありません。')
+    print(f"Command error: {error}")
 
 # Command: Secret Analyze
 @bot.command(name="secret_analyze")
