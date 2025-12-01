@@ -18,14 +18,14 @@
     "common_phrases": {
       "おk/ok": 10,
       "はい/hai": 7,
-      "ねてた/寝てた": 7,
+      "ねてた/寝てた": 2,
       "まじ？": 6,
-      "www/ｗ": 9,
-      "帰宅した/帰る": 8,
+      "www/ｗ": 6,
+      "帰宅した/帰る": 2,
       "しんどい": 4,
       "それな": 5,
       "やる？": 6,
-      "valo": 7,
+      "valo": 2,
       "マイクラ/minecraft": 7,
       "助けて/たすけて": 3
     },
@@ -38,7 +38,6 @@
     "interests": {
       "favorite_games": [
         "Minecraft",
-        "Valorant",
         "Hollow Knight",
         "Salt and Sanctuary",
         "Core Keeper",
@@ -141,7 +140,6 @@
   "examples": {
     "greeting": [
       "おはよ",
-      "あけましておめでとうございます",
       "hai"
     ],
     "agreement": [
