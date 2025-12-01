@@ -359,10 +359,17 @@ async def on_message(message):
                     found_member = info
                     break
             
-            # 2. Dynamic Profile (profiles.json)
+            # 2. Dynamic Profile (profiles_{personality}.json)
             dynamic_profile = {}
+            current_persona = pm.current_personality_name
+            # Ensure data directory exists
+            if not os.path.exists('data'):
+                os.makedirs('data')
+            
+            profile_file = f"data/profiles_{current_persona}.json"
+            
             try:
-                with open('profiles.json', 'r', encoding='utf-8') as pf:
+                with open(profile_file, 'r', encoding='utf-8') as pf:
                     all_profiles = json.load(pf)
                     dynamic_profile = all_profiles.get(author_id, {})
             except (FileNotFoundError, json.JSONDecodeError):
@@ -419,8 +426,9 @@ This tag will be hidden from the user but saved to your memory. Only use it for 
                 response_text = re.sub(r'\[\[MEMORY: .*?\]\]', '', response_text).strip()
                 
                 # Update profiles.json
+                # Update profile file
                 try:
-                    with open('profiles.json', 'r', encoding='utf-8') as pf:
+                    with open(profile_file, 'r', encoding='utf-8') as pf:
                         current_profiles = json.load(pf)
                 except (FileNotFoundError, json.JSONDecodeError):
                     current_profiles = {}
@@ -435,7 +443,8 @@ This tag will be hidden from the user but saved to your memory. Only use it for 
                         print(f"Learned new info about {author_name}: {mem}")
                 
                 current_profiles[author_id] = user_p
-                with open('profiles.json', 'w', encoding='utf-8') as pf:
+                current_profiles[author_id] = user_p
+                with open(profile_file, 'w', encoding='utf-8') as pf:
                     json.dump(current_profiles, pf, ensure_ascii=False, indent=2)
 
             # Store bot response in history (clean text)
