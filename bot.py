@@ -79,18 +79,26 @@ You are roleplaying as '{p_data.get('name', 'Unknown')}', a Discord user with a 
 """
     instruction += "CRITICAL: Respond in Japanese, stay in character, and follow the configuration strictly.\nUse the conversation history to maintain context and give natural, contextual responses.\n"
     instruction += """
-### Speaking Style Examples (Real quotes from takenicle):
-Here are some actual things takenicle has said. Mimic this style, vocabulary, and vibe exactly:
+### Speaking Style Examples (Real quotes from {p_data.get('name', 'Unknown')}):
+Here are some actual things {p_data.get('name', 'Unknown')} has said. Mimic this style, vocabulary, and vibe exactly:
 """
-    try:
-        with open('data/cleaned_messages.txt', 'r', encoding='utf-8') as f:
-            messages = [line.strip() for line in f if line.strip()]
-        import random
-        examples = random.sample(messages, min(len(messages), 50))
-        for msg in examples:
+    # Use examples from the loaded personality config
+    examples_dict = p_data.get('examples', {})
+    all_examples = []
+    for category, msgs in examples_dict.items():
+        if isinstance(msgs, list):
+            all_examples.extend(msgs)
+    
+    import random
+    if all_examples:
+        # Shuffle and pick up to 50 examples
+        selected_examples = random.sample(all_examples, min(len(all_examples), 50))
+        for msg in selected_examples:
             instruction += f"- {msg}\n"
-    except Exception as e:
-        print(f"Warning: Could not load examples: {e}")
+    else:
+        # Fallback if no examples found in JSON
+        instruction += "- (No specific examples found in configuration)\n"
+    
     return instruction
 
 SYSTEM_INSTRUCTION = build_system_instruction()
@@ -104,7 +112,7 @@ model = genai.GenerativeModel(
 # Initialize Discord client with commands extension
 intents = discord.Intents.default()
 intents.message_content = True
-# intents.members = True # Enable members intent for permission checks (Requires Privileged Intent in Dev Portal)
+intents.members = True # Enable members intent for permission checks
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
