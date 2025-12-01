@@ -21,3 +21,7 @@
     - [x] Create customizable personality config <!-- id: 18 -->
     - [x] Add example phrases database <!-- id: 19 -->
     - [x] Test enhanced bot <!-- id: 20 -->
+- [x] Personality Switching System
+    - [x] Create `personalities` directory and migrate `takenicle` config
+    - [x] Implement `PersonalityManager`
+    - [x] Update `bot.py` with `!mimic` command
