@@ -128,12 +128,17 @@ async def on_ready():
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
-# Slash Command: Mimic
-@bot.tree.command(name="mimic", description="Switch the bot's personality")
-@app_commands.describe(name="The name of the personality to switch to")
-async def mimic(interaction: discord.Interaction, name: str):
+# Slash Command: Mode
+@bot.tree.command(name="mode", description="Switch the bot's personality")
+@app_commands.describe(name="The name of the personality (e.g., take, swamp)")
+async def mode(interaction: discord.Interaction, name: str):
     await interaction.response.defer()
-    target_name = name.strip()
+    target_name = name.strip().lower()
+    
+    # Handle aliases
+    if target_name == 'take':
+        target_name = 'takenicle'
+    
     try:
         pm.load_personality(target_name)
         global SYSTEM_INSTRUCTION, model
@@ -143,7 +148,7 @@ async def mimic(interaction: discord.Interaction, name: str):
             system_instruction=SYSTEM_INSTRUCTION
         )
         
-        msg = f"Personality switched to: {target_name}"
+        msg = f"Mode switched to: {target_name}"
         
         # Change nickname
         if interaction.guild:
@@ -164,28 +169,34 @@ async def mimic(interaction: discord.Interaction, name: str):
     except Exception as e:
         await interaction.followup.send(f"Error switching personality: {e}")
 
-# Autocomplete for mimic command
-@mimic.autocomplete('name')
-async def mimic_autocomplete(
+# Autocomplete for mode command
+@mode.autocomplete('name')
+async def mode_autocomplete(
     interaction: discord.Interaction,
     current: str,
 ) -> list[app_commands.Choice[str]]:
-    personalities = pm.list_personalities()
+    # Custom suggestions
+    suggestions = ['take', 'swamp']
     return [
-        app_commands.Choice(name=p, value=p)
-        for p in personalities if current.lower() in p.lower()
+        app_commands.Choice(name=s, value=s)
+        for s in suggestions if current.lower() in s.lower()
     ]
 
-# Slash Command: Mimic List
-@bot.tree.command(name="mimic_list", description="List available personalities")
-async def mimic_list(interaction: discord.Interaction):
+# Slash Command: Mode List
+@bot.tree.command(name="mode_list", description="List available personalities")
+async def mode_list(interaction: discord.Interaction):
     personalities = pm.list_personalities()
     await interaction.response.send_message(f"Available personalities: {', '.join(personalities)}")
 
-# Text Command: Mimic
-@bot.command(name="mimic")
-async def mimic_text(ctx, name: str):
-    target_name = name.strip()
+# Text Command: Mode
+@bot.command(name="mode")
+async def mode_text(ctx, name: str):
+    target_name = name.strip().lower()
+    
+    # Handle aliases
+    if target_name == 'take':
+        target_name = 'takenicle'
+
     try:
         pm.load_personality(target_name)
         global SYSTEM_INSTRUCTION, model
@@ -195,7 +206,7 @@ async def mimic_text(ctx, name: str):
             system_instruction=SYSTEM_INSTRUCTION
         )
         
-        msg = f"Personality switched to: {target_name}"
+        msg = f"Mode switched to: {target_name}"
         
         # Change nickname
         if ctx.guild:
@@ -216,9 +227,9 @@ async def mimic_text(ctx, name: str):
     except Exception as e:
         await ctx.send(f"Error switching personality: {e}")
 
-# Text Command: Mimic List
-@bot.command(name="mimic_list")
-async def mimic_list_text(ctx):
+# Text Command: Mode List
+@bot.command(name="mode_list")
+async def mode_list_text(ctx):
     personalities = pm.list_personalities()
     await ctx.send(f"Available personalities: {', '.join(personalities)}")
 
