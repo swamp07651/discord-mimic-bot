@@ -371,7 +371,11 @@ async def on_message(message):
             try:
                 with open(profile_file, 'r', encoding='utf-8') as pf:
                     all_profiles = json.load(pf)
+                    # Try ID first
                     dynamic_profile = all_profiles.get(author_id, {})
+                    # If empty, try Name (fallback for migrated data)
+                    if not dynamic_profile:
+                        dynamic_profile = all_profiles.get(author_name, {})
             except (FileNotFoundError, json.JSONDecodeError):
                 all_profiles = {}
 
